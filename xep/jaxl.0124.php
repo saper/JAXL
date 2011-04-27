@@ -119,7 +119,7 @@
                 $jaxl->bosh['cookie']['https'],
                 $jaxl->bosh['cookie']['httponly']
             );
-            session_start();
+            //session_start();
         }
         
         public static function postHandler($payload, $jaxl) {
@@ -133,7 +133,8 @@
         
         public static function postBind($payload, $jaxl) {
             $jaxl->bosh['jid'] = $jaxl->jid;
-            $_SESSION['jaxl_auth'] = true;
+            $sess = Session::start('jaxl');
+            $sess->set('jaxl_auth', true);
             return;
         }
         
@@ -142,36 +143,38 @@
         }
         
         public static function loadSession($jaxl) {
-            $jaxl->bosh['rid'] = isset($_SESSION['jaxl_rid']) ? (string) $_SESSION['jaxl_rid'] : rand(1000, 10000);
-            $jaxl->bosh['sid'] = isset($_SESSION['jaxl_sid']) ? (string) $_SESSION['jaxl_sid'] : false;
-            $jaxl->lastid = isset($_SESSION['jaxl_id']) ? $_SESSION['jaxl_id'] : $jaxl->lastid;
-            $jaxl->jid = isset($_SESSION['jaxl_jid']) ? $_SESSION['jaxl_jid'] : $jaxl->jid;
-            $jaxl->log("[[JAXL0124]] Loading session data\n".json_encode($_SESSION), 5);
+            $sess = Session::start('jaxl');
+            $jaxl->bosh['rid'] = $sess->get('jaxl_rid') ? (string) $sess->get('jaxl_rid') : rand(1000, 10000);
+            $jaxl->bosh['sid'] = ($sess->get('jaxl_sid')) ? (string) $sess->get('jaxl_sid') : false;
+            $jaxl->lastid = ($sess->get('jaxl_id')) ? $sess->get('jaxl_id') : $jaxl->lastid;
+            $jaxl->jid = ($sess->get('jaxl_jid')) ? $sess->get('jaxl_jid') : $jaxl->jid;
+            $jaxl->log("[[JAXL0124]] Loading session data\n".json_encode($jaxl->bosh), 5);
         }
         
         public static function saveSession($xml, $jaxl) {
-            if($_SESSION['jaxl_auth'] === true) {
-                $_SESSION['jaxl_rid'] = isset($jaxl->bosh['rid']) ? $jaxl->bosh['rid'] : false;
-                $_SESSION['jaxl_sid'] = isset($jaxl->bosh['sid']) ? $jaxl->bosh['sid'] : false;
-                $_SESSION['jaxl_jid'] = $jaxl->jid;
-                $_SESSION['jaxl_id'] = $jaxl->lastid;
+            $sess = Session::start('jaxl');
+            if($sess->get('jaxl_auth') === true) {
+                $sess->set('jaxl_rid', isset($jaxl->bosh['rid']) ? $jaxl->bosh['rid'] : false);
+                $sess->set('jaxl_sid', isset($jaxl->bosh['sid']) ? $jaxl->bosh['sid'] : false);
+                $sess->set('jaxl_jid', $jaxl->jid);
+                $sess->set('jaxl_id', $jaxl->lastid);
                 
                 if($jaxl->bosh['out'] && $jaxl->bosh['session']) {
-                    session_write_close();
+                    //session_write_close();
                 }
 
                 if(self::$sess && $jaxl->bosh['out']) {
                     list($body, $xml) = self::unwrapBody($xml);
-                    $jaxl->log("[[JAXL0124]] Auth complete, sync now\n".json_encode($_SESSION), 5);
+                    $jaxl->log("[[JAXL0124]] Auth complete, sync now\n".json_encode($jaxl->bosh), 5);
                     return self::out(array('jaxl'=>'jaxl', 'xml'=>urlencode($xml)));
                 }
                 else {
                     self::$sess = true;
-                    $jaxl->log("[[JAXL0124]] Auth complete, commiting session now\n".json_encode($_SESSION), 5);
+                    $jaxl->log("[[JAXL0124]] Auth complete, commiting session now\n".json_encode($jaxl->bosh), 5);
                 }
             }
             else {
-                $jaxl->log("[[JAXL0124]] Not authed yet, Not commiting session\n".json_encode($_SESSION), 5);
+                $jaxl->log("[[JAXL0124]] Not authed yet, Not commiting session\n".json_encode($jaxl->bosh), 5);
             }
             
             return $xml;
@@ -186,7 +189,8 @@
                 $body .= ' xmlns="http://jabber.org/protocol/httpbind">';
                 $body .= $xml;
                 $body .= "</body>";
-                $_SESSION['jaxl_rid'] = $jaxl->bosh['rid'];
+                $sess = Session::start('jaxl');
+                $sess->set('jaxl_rid', $jaxl->bosh['rid']);
             }
             return $body;
         }
@@ -237,10 +241,11 @@
         public static function preHandler($payload, $jaxl) {
             if(substr($payload, 1, 4) == "body") {
                 list($body, $payload) = self::unwrapBody($payload);
+                $sess = Session::start('jaxl');
                 
                 if($payload == '') {
-                    if($_SESSION['jaxl_auth'] === 'disconnect') {
-                        $_SESSION['jaxl_auth'] = false;
+                    if($sess->get('jaxl_auth') === 'disconnect') {
+                        $sess->set('jaxl_auth', false);
                         $jaxl->executePlugin('jaxl_post_disconnect', $body);
                     }
                     else {
@@ -248,13 +253,13 @@
                     }
                 }
 
-                if($_SESSION['jaxl_auth'] === 'connect') {
+                if($sess->get('jaxl_auth') === 'connect') {
                     $arr = $jaxl->xml->xmlize($body);
                     if(isset($arr["body"]["@"]["sid"])) {
-                        $_SESSION['jaxl_auth'] = false;
-                        $_SESSION['jaxl_sid'] = $arr["body"]["@"]["sid"];
+                        $sess->set('jaxl_auth', false);
+                        $sess->set('jaxl_sid', $arr["body"]["@"]["sid"]);
                         $jaxl->bosh['sid'] = $arr["body"]["@"]["sid"];
-                        $jaxl->log("[[JAXL0124]] Updated session to ".json_encode($_SESSION), 5);
+                        $jaxl->log("[[JAXL0124]] Updated session to ".json_encode($jaxl->bosh), 5);
                     } 
                 }
             }

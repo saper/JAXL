@@ -60,7 +60,8 @@
         }
 
         public static function startStream($jaxl) {
-            $_SESSION['jaxl_auth'] = 'connect';
+            $sess = Session::start('jaxl');
+            $sess->set('jaxl_auth', 'connect');
 
             $xml = "";
             $xml .= "<body";
@@ -81,7 +82,8 @@
         }
         
         public static function endStream($jaxl) {
-            $_SESSION['jaxl_auth'] = 'disconnect';
+            $sess = Session::start('jaxl');
+            $sess->set('jaxl_auth', 'disconnect');
 
             $xml = "";
             $xml .= "<body";
@@ -105,8 +107,9 @@
             $xml .= " to='".$jaxl->host."'";
             $xml .= " xmpp:restart='true'";
             $xml .= " xmlns:xmpp='".$jaxl->bosh['xmlnsxmpp']."'/>";
-            
-            $_SESSION['jaxl_auth'] = false;
+
+            $sess = Session::start('jaxl');
+            $sess->set('jaxl_auth', false);
             $jaxl->sendXML($xml);
         }
         
@@ -115,8 +118,9 @@
             $xml .= '<body rid="'.++$jaxl->bosh['rid'].'"';
             $xml .= ' sid="'.$jaxl->bosh['sid'].'"';
             $xml .= ' xmlns="http://jabber.org/protocol/httpbind"/>';
-            
-            $_SESSION['jaxl_auth'] = true;
+
+            $sess = Session::start('jaxl');
+            $sess->set('jaxl_auth', true);
             $jaxl->sendXML($xml);
         }
 
