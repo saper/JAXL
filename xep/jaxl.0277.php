@@ -7,6 +7,11 @@ class JAXL0277 {
     public static function init($jaxl) {
         JAXLXml::addTag('iq','pubsubItemsEntryAuthor',  '//iq/pubsub/items/item/entry/source/author/name');
         JAXLXml::addTag('iq','pubsubItemsEntryContent',  '//iq/pubsub/items/item/entry/content');
+        JAXLXml::addTag('iq','pubsubItemsEntryPublished',  '//iq/pubsub/items/item/entry/published');
+        //JAXLXml::addTag('iq','pubsubItemsEntryLink',  '//iq/pubsub/items/item/entry/link/@href');
+        JAXLXml::addTag('iq','pubsubItemsEntryType',  '//iq/pubsub/items/item/entry/link/@type');
+        JAXLXml::addTag('iq','pubsubItemsEntryRel',  '//iq/pubsub/items/item/entry/link/@rel');
+        JAXLXml::addTag('iq','pubsubItemsEntryLinkRel',  '//iq/pubsub/items/item/entry/link/link/@rel');
     }
     
     public static function getItems($jaxl, $to) {

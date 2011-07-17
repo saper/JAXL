@@ -61,6 +61,11 @@
             JAXLXml::addTag('message', 'headers', '//message/headers/@xmlns');
             JAXLXml::addTag('message', 'header', '//message/headers/header');
             JAXLXml::addTag('message', 'headerName', '//message/headers/header/@name');
+
+            JAXLXml::addTag('iq','pubsubNode',  '//iq/pubsub/items/@node');
+            JAXLXml::addTag('iq','pubsubItemsId',  '//iq/pubsub/items/item/@id');
+            JAXLXml::addTag('iq','pubsubItemsEntryTitle',  '//iq/pubsub/items/item/entry/title');
+            JAXLXml::addTag('iq','pubsubItemsEntrySummary',  '//iq/pubsub/items/item/entry/summary');
         }
         
         /*
@@ -139,7 +144,7 @@
         public static function getNodeItems($jaxl, $to, $from, $node) {
             $payload = '';
             $payload .= '<pubsub xmlns="'.self::$ns.'">';
-            $payload .= '<item node="'.$node.'"/>';
+            $payload .= '<items node="'.$node.'"/>';
             $payload .= '</pubsub>';
             return XMPPSend::iq($jaxl, 'get', $payload, $to, $from, $callback);
         }
