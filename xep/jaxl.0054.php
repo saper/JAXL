@@ -84,8 +84,14 @@
             return XMPPSend::iq($jaxl, 'get', $payload, $to, $from, $callback);
 		}
 		
-		public static function updateVCard($jaxl, $to, $from) {
-			
+		public static function updateVCard($jaxl, $values) {
+            $payload = '<vCard xmlns="'.self::$ns.'">';
+                $payload .= '<FN>'.$values["vCardFN"].'</FN>';
+                $payload .= '<NICKNAME>'.$values["vCardNickname"].'</NICKNAME>';
+                $payload .= '<BDAY>'.$values["vCardBDay"].'</BDAY>';
+                $payload .= '<URL>'.$values["vCardUrl"].'</URL>';
+            $payload .= '</vCard>';
+            return XMPPSend::iq($jaxl, 'set', $payload, $to, $from, $callback);
 		}
 		
 		
