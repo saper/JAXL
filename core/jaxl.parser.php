@@ -142,6 +142,10 @@
          * @return array $payload An associative array of parsed xpaths as specified inside tagMap
         */
         public static function parse($xml, $sxe=false, &$tagMap=null) {
+            $file = simplexml_load_string($xml);
+            $arr = array();
+            JAXLXml::x2r($file, $arr);
+            
             $payload = array();
             
             $xml = str_replace('xmlns=', 'ns=', $xml);
@@ -210,7 +214,29 @@
             
             if($sxe) $payload['xml'] = $xml;
             unset($xml);
+
+            if(isset($payload['iq']))
+                $payload['iq']['movim'] = $arr;
+            elseif(isset($payload['message']))
+                $payload['message']['movim'] = $arr;
+            elseif(isset($payload['presence']))
+                $payload['presence']['movim'] = $arr;
+
             return $payload;
+        }
+        
+        public function x2r($file, &$arr) {
+            $arr = get_object_vars($file);
+            foreach($arr as $key => $value) {
+                if(is_object($value)) 
+                    JAXLXml::x2r($value, $arr[$key]);
+                elseif(is_array($value) && isset($value[0]) && is_object($value[0])) {
+                    foreach($value as $key_e => $val_e) {
+                        JAXLXml::x2r($val_e, $arr[$key][$key_e]);
+                    }
+                }        
+            }
+            return;
         }
        
         /**

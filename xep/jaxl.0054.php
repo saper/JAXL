@@ -90,6 +90,7 @@
                 $payload .= '<NICKNAME>'.$values["vCardNickname"].'</NICKNAME>';
                 $payload .= '<BDAY>'.$values["vCardBDay"].'</BDAY>';
                 $payload .= '<URL>'.$values["vCardUrl"].'</URL>';
+                $payload .= '<DESC>'.$values["vCardDesc"].'</DESC>';
             $payload .= '</vCard>';
             return XMPPSend::iq($jaxl, 'set', $payload, $to, $from, $callback);
 		}

@@ -66,6 +66,9 @@
             JAXLXml::addTag('iq','pubsubItemsId',  '//iq/pubsub/items/item/@id');
             JAXLXml::addTag('iq','pubsubItemsEntryTitle',  '//iq/pubsub/items/item/entry/title');
             JAXLXml::addTag('iq','pubsubItemsEntrySummary',  '//iq/pubsub/items/item/entry/summary');
+            JAXLXml::addTag('iq','pubsubItemsEntryAuthorName',  '//iq/pubsub/items/item/entry/author/name');   
+            
+            JAXLXml::addTag('iq','queryItemNode',  '//iq/query/item/@node');
         }
         
         /*
