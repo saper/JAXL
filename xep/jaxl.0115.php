@@ -72,7 +72,6 @@
         public static function getVerificationString($jaxl, $features) {
             asort($features);
             $S = $jaxl->category.'/'.$jaxl->type.'/'.$jaxl->lang.'/'.$jaxl->getName().'<';
-            $S .= 'pubsub/pep//<';
             foreach($features as $feature) $S .= $feature.'<';
             $ver = base64_encode(sha1($S, true));
             return $ver;
