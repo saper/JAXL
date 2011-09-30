@@ -3,8 +3,12 @@
 class JAXL0277 {
 
     public static $ns = 'http://jabber.org/protocol/pubsub';
+    public static $ns2 = 'urn:xmpp:microblog:0';
+    public static $ns3 = 'urn:xmpp:microblog:0+notify';
     
     public static function init($jaxl) {
+        $jaxl->features[] = self::$ns2;
+        $jaxl->features[] = self::$ns3;
         JAXLXml::addTag('iq','pubsubItemsEntryAuthor',  '//iq/pubsub/items/item/entry/source/author/name');
         JAXLXml::addTag('iq','pubsubItemsEntryContent',  '//iq/pubsub/items/item/entry/content');
         JAXLXml::addTag('iq','pubsubItemsEntryPublished',  '//iq/pubsub/items/item/entry/published');

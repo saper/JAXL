@@ -171,9 +171,10 @@
                 if(isset($child['show'])) $xml .= '<show>'.$child['show'].'</show>';
                 if(isset($child['status'])) $xml .= '<status>'.JAXLUtil::xmlentities($child['status']).'</status>';
                 if(isset($child['priority'])) $xml .= '<priority>'.$child['priority'].'</priority>';
-                if(isset($child['payload'])) $xml .= $child['payload'];
+            //    if(isset($child['payload'])) $xml .= $child['payload'];
             }
-            
+            // A little patch to allow Movim to receive Microbloging + PEP stanzas
+            $xml .= '<c xmlns="http://jabber.org/protocol/caps" hash="sha1" node="http://code.google.com/p/jaxl" ver="gHGosFLOsho3lu2BzyDJ04j78wQ="/>';
             $xml.= '</presence>';
             return $xml;
         }

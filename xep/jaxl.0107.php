@@ -47,6 +47,7 @@
     class JAXL0107 {
 
         public static $ns = 'http://jabber.org/protocol/mood';
+        public static $ns2 = 'http://jabber.org/protocol/mood+notify';
 
         public static function init($jaxl) {
             // requires PEP XEP
@@ -54,6 +55,7 @@
 
             // update feature list
             $jaxl->features[] = self::$ns;
+            $jaxl->features[] = self::$ns2;
 
             JAXLXml::addTag('message', 'mood', '//message/event/items/item/mood/@xmlns');
         }

@@ -47,6 +47,7 @@
     class JAXL0118 {
 
         public static $ns = 'http://jabber.org/protocol/tune';
+        public static $ns2 = 'http://jabber.org/protocol/tune+notify';
 
         public static function init($jaxl) {
             // requires PEP XEP
@@ -54,6 +55,7 @@
 
             // update client feature list
             $jaxl->features[] = self::$ns;
+            $jaxl->features[] = self::$ns2;
 
             JAXLXml::addTag('message', 'tune', '//message/event/items/item/tune/@xmlns');
             JAXLXml::addTag('message', 'tuneArtist', '//message/event/items/item/tune/artist');
