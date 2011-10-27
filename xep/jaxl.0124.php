@@ -145,6 +145,7 @@
         public static function loadSession($jaxl) {
             $sess = Session::start('jaxl');
             $jaxl->bosh['rid'] = $sess->get('jaxl_rid') ? (string) $sess->get('jaxl_rid') : rand(1000, 10000);
+            $sess->set('jaxl_rid', $jaxl->bosh['rid']);
             $jaxl->bosh['sid'] = ($sess->get('jaxl_sid')) ? (string) $sess->get('jaxl_sid') : false;
             $jaxl->lastid = ($sess->get('jaxl_id')) ? $sess->get('jaxl_id') : $jaxl->lastid;
             $jaxl->jid = ($sess->get('jaxl_jid')) ? $sess->get('jaxl_jid') : $jaxl->jid;
@@ -154,7 +155,7 @@
         public static function saveSession($xml, $jaxl) {
             $sess = Session::start('jaxl');
             if($sess->get('jaxl_auth') === true) {
-                $sess->set('jaxl_rid', isset($jaxl->bosh['rid']) ? $jaxl->bosh['rid'] : false);
+                //$sess->set('jaxl_rid', isset($jaxl->bosh['rid']) ? $jaxl->bosh['rid'] : false);
                 $sess->set('jaxl_sid', isset($jaxl->bosh['sid']) ? $jaxl->bosh['sid'] : false);
                 $sess->set('jaxl_jid', $jaxl->jid);
                 $sess->set('jaxl_id', $jaxl->lastid);
@@ -183,14 +184,18 @@
         public static function wrapBody($xml, $jaxl) {
             $body = trim($xml);
             if(substr($body, 1, 4) != 'body') {
+                $sess = Session::start('jaxl');
+                $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
+                
                 $body = '';
                 $body .= '<body rid="'.++$jaxl->bosh['rid'].'"';
                 $body .= ' sid="'.$jaxl->bosh['sid'].'"';
                 $body .= ' xmlns="http://jabber.org/protocol/httpbind">';
                 $body .= $xml;
                 $body .= "</body>";
-                $sess = Session::start('jaxl');
+                //$sess = Session::start('jaxl');
                 $sess->set('jaxl_rid', $jaxl->bosh['rid']);
+                
             }
             return $body;
         }
