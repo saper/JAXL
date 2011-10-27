@@ -193,7 +193,7 @@
                 $body .= ' xmlns="http://jabber.org/protocol/httpbind">';
                 $body .= $xml;
                 $body .= "</body>";
-                //$sess = Session::start('jaxl');
+
                 $sess->set('jaxl_rid', $jaxl->bosh['rid']);
                 
             }

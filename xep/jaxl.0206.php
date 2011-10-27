@@ -62,7 +62,7 @@
         public static function startStream($jaxl) {
             $sess = Session::start('jaxl');
             $sess->set('jaxl_auth', 'connect');
-                $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
+            $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
 
             $xml = "";
             $xml .= "<body";
@@ -79,7 +79,7 @@
             $xml .= " route='xmpp:".$jaxl->host.":".$jaxl->port."'";
             $xml .= " xmpp:version='".$jaxl->bosh['xmppversion']."'/>";
             
-                $sess->set('jaxl_rid', $jaxl->bosh['rid']);
+            $sess->set('jaxl_rid', $jaxl->bosh['rid']);
             
             $jaxl->sendXML($xml);
         }
@@ -87,7 +87,7 @@
         public static function endStream($jaxl) {
             $sess = Session::start('jaxl');
             $sess->set('jaxl_auth', 'disconnect');
-                $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
+            $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
 
             $xml = "";
             $xml .= "<body";
@@ -98,14 +98,14 @@
             $xml .= "<presence type='unavailable' xmlns='jabber:client'/>";
             $xml .= "</body>";
             
-                $sess->set('jaxl_rid', $jaxl->bosh['rid']);
+            $sess->set('jaxl_rid', $jaxl->bosh['rid']);
             
             $jaxl->sendXML($xml);
         }
         
         public static function restartStream($jaxl) {
-                $sess = Session::start('jaxl');
-                $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
+            $sess = Session::start('jaxl');
+            $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
         
             $xml = "";
             $xml .= "<body";
@@ -117,23 +117,23 @@
             $xml .= " xmpp:restart='true'";
             $xml .= " xmlns:xmpp='".$jaxl->bosh['xmlnsxmpp']."'/>";
 
-                $sess->set('jaxl_rid', $jaxl->bosh['rid']);
-            //$sess = Session::start('jaxl');
+            $sess->set('jaxl_rid', $jaxl->bosh['rid']);
+            
             $sess->set('jaxl_auth', false);
             $jaxl->sendXML($xml);
         }
         
         public static function ping($jaxl) {
-                $sess = Session::start('jaxl');
-                $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
+            $sess = Session::start('jaxl');
+            $jaxl->bosh['rid'] = $sess->get('jaxl_rid');
         
             $xml = '';
             $xml .= '<body rid="'.++$jaxl->bosh['rid'].'"';
             $xml .= ' sid="'.$jaxl->bosh['sid'].'"';
             $xml .= ' xmlns="http://jabber.org/protocol/httpbind"/>';
 
-                $sess->set('jaxl_rid', $jaxl->bosh['rid']);
-            //$sess = Session::start('jaxl');
+            $sess->set('jaxl_rid', $jaxl->bosh['rid']);
+
             $sess->set('jaxl_auth', true);
             $jaxl->sendXML($xml);
         }
