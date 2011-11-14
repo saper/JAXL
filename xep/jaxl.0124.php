@@ -86,6 +86,8 @@
             $jaxl->bosh['out'] = $jaxl->getConfigByPriority(@$jaxl->config['boshOut'], "JAXL_BOSH_OUT", $jaxl->bosh['out']);
             $jaxl->bosh['session'] = $jaxl->getConfigByPriority(@$jaxl->config['boshSession'], "JAXL_BOSH_SESSION", $jaxl->bosh['session']);
             $jaxl->bosh['url'] = "http://".$jaxl->bosh['host'].":".$jaxl->bosh['port']."/".$jaxl->bosh['suffix']."/";
+            
+            //$jaxl->bosh['url'] = "http://".$jaxl->bosh['host'];
 
             // cookie params
             $jaxl->bosh['cookie']['ttl'] = $jaxl->getConfigByPriority(@$jaxl->config['boshCookieTTL'], "JAXL_BOSH_COOKIE_TTL", $jaxl->bosh['cookie']['ttl']);
