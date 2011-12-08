@@ -104,7 +104,7 @@
             $jaxl->addPlugin('jaxl_pre_handler', array('JAXL0124', 'preHandler'));
             $jaxl->addPlugin('jaxl_post_handler', array('JAXL0124', 'postHandler'));
             $jaxl->addPlugin('jaxl_send_body', array('JAXL0124', 'sendBody'));
-
+            
             self::loadSession($jaxl);
         }
 
@@ -221,7 +221,7 @@
                         default:
                             break;
                     }
-
+					
                     $jaxl->executePlugin('jaxl_get_bosh_curl_error', $payload);
                     $jaxl->log($log);
                 }

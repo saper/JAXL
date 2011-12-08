@@ -48,7 +48,6 @@
         
         public static function curl($url, $type='GET', $headers=array(), $data=false, $user=false, $pass=false) {
             $ch = curl_init($url);
-
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
