@@ -47,11 +47,20 @@
     class JAXLUtil {
         
         public static function curl($url, $type='GET', $headers=array(), $data=false, $user=false, $pass=false) {
+            $serverConf = Conf::getServerConf();
+            
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            
+            if($serverConf['proxyEnabled'] == 'true') {            
+                curl_setopt($ch, CURLOPT_PROXYPORT, $serverConf['proxyPort']);
+                curl_setopt($ch, CURLOPT_PROXYTYPE, 'HTTP');
+                curl_setopt($ch, CURLOPT_PROXY, $serverConf['proxyURL']);
+            }
+            
             curl_setopt($ch, CURLOPT_VERBOSE, false);
             
             if($type == 'POST') {
