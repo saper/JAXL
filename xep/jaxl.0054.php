@@ -91,9 +91,11 @@
                 $payload .= '<BDAY>'.$values["vCardBDay"].'</BDAY>';
                 $payload .= '<URL>'.$values["vCardUrl"].'</URL>';
                 $payload .= '<DESC>'.$values["vCardDesc"].'</DESC>';
+                $payload .= '<X-GENDER>'.$values["vCardGender"].'</X-GENDER>';
+                $payload .= '<MARITAL><STATUS>'.$values["vCardMaritalStatus"].'</STATUS></MARITAL>'; 
                 $payload .= '<PHOTO>';
-                    $payload .= '<TYPE>'.$values['vCardPhotoType'].'</TYPE>';
-                    $payload .= '<BINVAL>'.$values['vCardPhotoBinVal'].'</BINVAL>';
+                    $payload .= '<TYPE>'.$values["vCardPhotoType"].'</TYPE>';
+                    $payload .= '<BINVAL>'.$values["vCardPhotoBinVal"].'</BINVAL>';
                 $payload .= '</PHOTO>';
             $payload .= '</vCard>';
             return XMPPSend::iq($jaxl, 'set', $payload, $to, $from, $callback);
