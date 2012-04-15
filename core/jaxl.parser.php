@@ -145,7 +145,6 @@
             $file = simplexml_load_string($xml);
             $arr = array();
             JAXLXml::x2r($file, $arr);
-            
             $payload = array();
             
             $xml = str_replace('xmlns=', 'ns=', $xml);
@@ -212,25 +211,40 @@
                 }
             }
             
+            if(isset($payload['iq'])) {
+                $payload['iq']['movim'] = $arr;
+            } elseif(isset($payload['message'])) {
+                $payload['message']['movim'] = $arr;
+            } elseif(isset($payload['presence'])) {
+                $payload['presence']['movim'] = $arr;
+            }
+            
             if($sxe) $payload['xml'] = $xml;
             unset($xml);
-
-            if(isset($payload['iq']))
-                $payload['iq']['movim'] = $arr;
-            elseif(isset($payload['message']))
-                $payload['message']['movim'] = $arr;
-            elseif(isset($payload['presence']))
-                $payload['presence']['movim'] = $arr;
 
             return $payload;
         }
         
-        public function x2r($file, &$arr) {
+        static public function x2r($file, &$arr) {
             $arr = get_object_vars($file);
             foreach($arr as $key => $value) {
-                if(is_object($value)) 
+                if(is_object($value)) {
+                    // Namespace Case
+                    if($ns = $value->getNameSpaces()) {
+                        foreach($ns as $key_ns => $val_ns)
+                            $arr['@attributes']['xmlns'] = $val_ns;
+                    }
+
                     JAXLXml::x2r($value, $arr[$key]);
-                elseif(is_array($value) && isset($value[0]) && is_object($value[0])) {
+                    
+                    if($value->count() > 0) {
+                        foreach($value->children() as $key_c => $val_c) {
+                            if(!isset($arr[$key][$key_c]))
+                                JAXLXml::x2r($val_c, $arr[$key][$key_c]);
+                        }
+                    }
+                        
+                } elseif(is_array($value) && isset($value[0]) && is_object($value[0])) {
                     foreach($value as $key_e => $val_e) {
                         JAXLXml::x2r($val_e, $arr[$key][$key_e]);
                     }
