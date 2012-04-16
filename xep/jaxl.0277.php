@@ -30,7 +30,7 @@ class JAXL0277 {
                             </field>
 
                             <field var='pubsub#title'>
-                                <value>Gnagna</value>
+                                <value></value>
                             </field>
 
                             <field var='pubsub#deliver_notifications'>
@@ -151,6 +151,28 @@ class JAXL0277 {
                         <author>
                             <name></name>
                             <uri>xmpp:'.$to.'</uri>
+                        </author>
+                    </source>
+                    <content type="text">'.$content.'</content>
+                    <published>'.date(DATE_ISO8601).'</published>
+                    <updated>'.date(DATE_ISO8601).'</updated>
+                </entry>
+            </item>
+            </publish>
+        </pubsub>';
+        return XMPPSend::iq($jaxl, 'set', $payload, $to);
+    }
+    
+    public static function publishComment($jaxl, $to, $id, $content, $from, $callback) {
+        $payload ='
+        <pubsub xmlns="'.self::$ns.'">
+            <publish node="urn:xmpp:microblog:0:comments/'.$id.'">
+            <item id="'.sha1(date(DATE_ISO8601).$to.$jid.$content).'">
+                <entry xmlns="http://www.w3.org/2005/Atom">
+                    <source>
+                        <author>
+                            <name></name>
+                            <uri>xmpp:'.$from.'</uri>
                         </author>
                     </source>
                     <content type="text">'.$content.'</content>
