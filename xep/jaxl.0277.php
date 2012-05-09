@@ -122,6 +122,16 @@ class JAXL0277 {
         $payload .= '</pubsub>';
         return XMPPSend::iq($jaxl, 'get', $payload, $to);
     }
+    
+    public static function getItem($jaxl, $to, $id) {
+        $payload = '';
+        $payload .= '<pubsub xmlns="'.self::$ns.'">';
+        $payload .= '<items node="urn:xmpp:microblog:0" max_items="20">';
+        $payload .= '<item id="'.$id.'"/>';
+        $payload .= '</items>';
+        $payload .= '</pubsub>';
+        return XMPPSend::iq($jaxl, 'get', $payload, $to);
+    }
 
     public static function getComments($jaxl, $to, $id) {
         $payload = '';

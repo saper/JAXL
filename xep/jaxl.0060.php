@@ -152,6 +152,16 @@
             return XMPPSend::iq($jaxl, 'get', $payload, $to, $from, $callback);
         }
         
+        public static function getNodeItem($jaxl, $to, $from, $node, $item) {
+            $payload = '';
+            $payload .= '<pubsub xmlns="'.self::$ns.'">';
+            $payload .= '<items node="'.$node.'"/>';
+            $payload .= '<item id="'.$item.'"/>';
+            $payload .= '</items>';
+            $payload .= '</pubsub>';
+            return XMPPSend::iq($jaxl, 'get', $payload, $to, $from, $callback);
+        }
+        
         /*
          * Publisher Use Cases
         */
