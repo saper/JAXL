@@ -95,7 +95,7 @@
                     $xml .= '<feature var="'.$feature.'"/>';
                 $xml .= '</query>';
                 
-                XMPPSend::iq($jaxl, 'result', $xml, $payload['from'], $payload['to'], false, $payload['id']);
+                //XMPPSend::iq($jaxl, 'result', $xml, $payload['from'], $payload['to'], false, $payload['id']);
             }
             else if($payload['queryXmlns'] == self::$ns['items']) {
                 

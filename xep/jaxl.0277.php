@@ -106,11 +106,18 @@ class JAXL0277 {
                             <value>http://jabxslt.jabberstudio.org/atom_body.xslt</value>
 
                             </field>
-
                         </x>
 
                     </configure>
         ";
+        $payload .= '</pubsub>';
+        return XMPPSend::iq($jaxl, 'set', $payload, $to);
+    }
+    
+    public static function createCommentNode($jaxl, $to, $pid) {
+        $payload = '';
+        $payload .= '<pubsub xmlns="'.self::$ns.'">';
+        $payload .= '<create node="xmpp:'.$to.'?;urn:xmpp:microblog:0:comments/'.$pid.'"/>';
         $payload .= '</pubsub>';
         return XMPPSend::iq($jaxl, 'set', $payload, $to);
     }
@@ -151,11 +158,13 @@ class JAXL0277 {
         return XMPPSend::iq($jaxl, 'set', $payload, $contact);
     }
 
-    public static function publishItem($jaxl, $to, $content, $from, $callback) {
+    public static function publishItem($jaxl, $to, $content, $from, $callback, $id) {   
+        //<link rel="replies" title="comments" href="xmpp:'.$to.'?;node=urn:xmpp:microblog:0:comments/'.$id.'"/> 
+        //<published>'.date(DATE_ISO8601).'</published>  
         $payload ='
         <pubsub xmlns="'.self::$ns.'">
             <publish node="urn:xmpp:microblog:0">
-            <item>
+            <item id="'.$id.'">
                 <entry xmlns="http://www.w3.org/2005/Atom">
                     <source>
                         <author>
@@ -163,8 +172,9 @@ class JAXL0277 {
                             <uri>xmpp:'.$to.'</uri>
                         </author>
                     </source>
+                    <link rel="replies" title="comments" href="xmpp:'.$to.'?;node=urn:xmpp:microblog:0:comments/'.$id.'"/>
                     <content type="text">'.$content.'</content>
-                    <published>'.date(DATE_ISO8601).'</published>
+                    
                     <updated>'.date(DATE_ISO8601).'</updated>
                 </entry>
             </item>
