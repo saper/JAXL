@@ -117,7 +117,28 @@ class JAXL0277 {
     public static function createCommentNode($jaxl, $to, $pid) {
         $payload = '';
         $payload .= '<pubsub xmlns="'.self::$ns.'">';
-        $payload .= '<create node="xmpp:'.$to.'?;urn:xmpp:microblog:0:comments/'.$pid.'"/>';
+        $payload .= '<create node="urn:xmpp:microblog:0:comments/'.$pid.'"/>';
+        $payload .= '
+          <configure node="urn:xmpp:microblog:0:comments/8dbe695560ece1a1f51b9cd953813d64">
+            <x xmlns="jabber:x:data" type="submit">
+              <field var="FORM_TYPE" type="hidden">
+                <value>http://jabber.org/protocol/pubsub#node_config</value>
+              </field>
+              <field var="pubsub#persist_items">
+                <value>1</value>
+              </field>
+              <field var="pubsub#max_items">
+                <value>1000000</value>
+              </field>
+              <field var="pubsub#access_model">
+                <value>open</value>
+              </field>
+              <field var="pubsub#publish_model">
+                <value>open</value>
+              </field>
+            </x>
+          </configure>
+        ';
         $payload .= '</pubsub>';
         return XMPPSend::iq($jaxl, 'set', $payload, $to);
     }
